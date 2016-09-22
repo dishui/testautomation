@@ -1,4 +1,4 @@
-# FrontEnd Automation
+# CI Automation Pipeline
 
 ## Tools
 

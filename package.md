@@ -49,9 +49,6 @@ _wml.envInfo = {"APP_SHA":"0fcc24b5765d930d9a9d78aa165f2a3f6a0f90ee","APP_VERSIO
   window._wml.cdn={
   md:{
   "a547365dbea4862517ca80bade3d7b9d.png": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/a547365dbea4862517ca80bade3d7b9d.png",
-  "060e07198f5e853ca9e680611835bc36.png": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/060e07198f5e853ca9e680611835bc36.png",
-  "64c7dc7eac3a9dae329bc890a51d6cf9.png": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/64c7dc7eac3a9dae329bc890a51d6cf9.png",
-  "0cd022308a6d210fe4aa264f7e04e865.png": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/0cd022308a6d210fe4aa264f7e04e865.png",
   "705d33b9d2f07f4677e8ce0d6fc2fb9c.eot": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/705d33b9d2f07f4677e8ce0d6fc2fb9c.eot",
   "a1814ff16143cc3d60a91bab404fdbf9.woff2": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/a1814ff16143cc3d60a91bab404fdbf9.woff2",
   "5c474d6968590717f414ded5db58470c.woff": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/5c474d6968590717f414ded5db58470c.woff",
@@ -62,6 +59,43 @@ _wml.envInfo = {"APP_SHA":"0fcc24b5765d930d9a9d78aa165f2a3f6a0f90ee","APP_VERSIO
   "style.9946b191cf163dda8cfb-2.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-2.css",
   "style.9946b191cf163dda8cfb-split.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-split.css"
 },
+
+## Async loader, Little loader.
+
+At the bottom of the page, we load the `bundle.${build-id}.js`.
+    <script>
+        _wml.perf.mark("before-bundle")
+    </script>
+    <script src="https://i5.wal.co/dfw/63fd9f59-bc1c/7fb7089a-1cd2-4d7c-813a-5de7d05d0f86/v1/bundle.ad843d7ce38658e8c011.js"></script>
+    <script>
+        _wml.perf.mark("after-bundle")
+    </script>
+
+Other analytics scripts.
+    <script>
+      (function(e) {
+        var t = e.document;
+        BOOMR = e.BOOMR || {};
+        BOOMR.plugins = BOOMR.plugins || {};
+        BOOMR.plugins.pageMeta = {
+          init: function(r) {
+            localStorage.setItem(n.localStorageTestKey, n.localStorageTestKey);
+            BOOMR.addVar("ref", t.referrer);
+            BOOMR.addVar(m_name, e.performance.memory[m_name])
+            BOOMR.addVar("wH", e.innerHeight || t.body.clientHeight || t.documentElement.clientHeight);
+            BOOMR.addVar("tags", n.pageTags.join("|"));
+            return this
+          },
+          addConversion: function(e, t) {
+            BOOMR.addVar("conversion", n.pageConversions.join("|"))
+          }
+        }
+      })(window);
+      (function(e) {
+        try {
+        } catch (t) {}
+      })(window);
+    </script>
 
 
 ## Electrode server entry point, `server/index.js`
@@ -95,7 +129,23 @@ extendRequire({assetsFile: "dist/isomorphic-assets.json"})
   })
 ```
 
-## Electrode server app.js init redux router engine that exports fn to take request object and fill redux store data.
+## Redux Route Engine
+
+Electrode server app.js init redux router engine that exports fn to take request object and fill redux store data.
+
+server/index.js extendRequire electrode-server with configs and set up fetch listener.
+```
+    var extendRequire = require("isomorphic-loader/lib/extend-require");
+    extendRequire({assetsFile: "dist/isomorphic-assets.json"})
+      .then(function () {
+        require("@walmart/electrode-server")(require("@walmart/electrode-config").config)
+          .then(function () {
+            require("@walmart/electrode-fetch").setListener(fetchLogger);
+          }
+        });
+```
+
+server/app.js then init reduxRouterEngine.
 
 ```
 // Export a function that takes in `request` object and returns an html object
@@ -156,7 +206,9 @@ module.exports = reduxRouterEngine(routes, function (req) {
 });
 ```
 
-## Electrode client/app.js just init ElectrodeApplication.
+## CSR with React resolver render or ReactDOM.render
+
+Electrode client/app.js just init ElectrodeApplication.
 
 ```
 const initialState = window.__WML_REDUX_INITIAL_STATE__;
@@ -184,7 +236,6 @@ import { Resolver } from "react-resolver";
 
 const run = () => {
   const rootEl = document.querySelector(".js-content");
-
   Resolver.render(() => {
     // Create a store with already bootstrapped initialState
     const store = createStore();
@@ -203,4 +254,7 @@ const run = () => {
   }, rootEl);
 };
 ```
+
+
+## Multipe entry points.
 

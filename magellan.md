@@ -114,6 +114,16 @@ Shifu will start the mock server and API json will be served when ajax/fetch req
 
 nightwatch-init.js defines how smock/shifu will start app server instance and mock server instance. server instances running on appPort and mocksPort.
 
+API Plugin hander in App server is configurated to point to mocker port during nightwatch-init where mock server port is allocated. 
+
+  "p13nAPI": {
+    "hostName": "http://dev.walmart.com:8000",  <-- re-write with mock server:mock_port
+    "url": "/product/api/p13n",
+    "p13nUrl": "/product"
+  },
+
+with re-write of mock.json for app server configuration json. App server will started with API endpoint points to mock server.
+
   module.exports = require('@walmart/shifu-magellan-nightwatch').nightwatch({
 
     // point to our mock server hapi plugin

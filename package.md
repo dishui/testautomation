@@ -46,19 +46,21 @@ _wml.envInfo = {"APP_SHA":"0fcc24b5765d930d9a9d78aa165f2a3f6a0f90ee","APP_VERSIO
 
 ## CDN
 
-  window._wml.cdn={
-  md:{
-  "a547365dbea4862517ca80bade3d7b9d.png": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/a547365dbea4862517ca80bade3d7b9d.png",
-  "705d33b9d2f07f4677e8ce0d6fc2fb9c.eot": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/705d33b9d2f07f4677e8ce0d6fc2fb9c.eot",
-  "a1814ff16143cc3d60a91bab404fdbf9.woff2": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/a1814ff16143cc3d60a91bab404fdbf9.woff2",
-  "5c474d6968590717f414ded5db58470c.woff": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/5c474d6968590717f414ded5db58470c.woff",
-  "f9d141cf92022490054db967c79864cc.ttf": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/f9d141cf92022490054db967c79864cc.ttf",
-  "bundle.9946b191cf163dda8cfb.js": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/bundle.9946b191cf163dda8cfb.js",
-  "style.9946b191cf163dda8cfb.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb.css",
-  "style.9946b191cf163dda8cfb-1.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-1.css",
-  "style.9946b191cf163dda8cfb-2.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-2.css",
-  "style.9946b191cf163dda8cfb-split.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-split.css"
-},
+  <script>
+    window._wml.cdn={
+      md:{
+        "a547365dbea4862517ca80bade3d7b9d.png": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/a547365dbea4862517ca80bade3d7b9d.png",
+        "705d33b9d2f07f4677e8ce0d6fc2fb9c.eot": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/705d33b9d2f07f4677e8ce0d6fc2fb9c.eot",
+        "a1814ff16143cc3d60a91bab404fdbf9.woff2": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/a1814ff16143cc3d60a91bab404fdbf9.woff2",
+        "5c474d6968590717f414ded5db58470c.woff": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/5c474d6968590717f414ded5db58470c.woff",
+        "f9d141cf92022490054db967c79864cc.ttf": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/f9d141cf92022490054db967c79864cc.ttf",
+        "bundle.9946b191cf163dda8cfb.js": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/bundle.9946b191cf163dda8cfb.js",
+        "style.9946b191cf163dda8cfb.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb.css",
+        "style.9946b191cf163dda8cfb-1.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-1.css",
+        "style.9946b191cf163dda8cfb-2.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-2.css",
+        "style.9946b191cf163dda8cfb-split.css": "//i5.walmartimages.com/dfw/63fd9f59-a1fb/8a15c5bd-b564-4c65-a58c-75dc277d98ba/v1/style.9946b191cf163dda8cfb-split.css"
+      },
+  </script>
 
 ## Async loader, Little loader.
 
@@ -71,8 +73,23 @@ At the bottom of the page, we load the `bundle.${build-id}.js`.
         _wml.perf.mark("after-bundle")
     </script>
 
+    if (googleAds) {
+      var googleScriptEl = document.createElement("script");
+      googleScriptEl.src = "//www.google.com/adsense/search/ads.js";
+      googleScriptEl.async = true;
+      document.head.appendChild(googleScriptEl);
+    };
+
 Other analytics scripts.
     <script>
+      window._lload("//fonts.walmart.com/fqp0lia.js", function() {
+        Typekit.load();
+      });
+       _wml.config = {
+            ccm: { ... }
+      };
+      window._wml.seoTags = (function e(r) { ... })({configs:...})
+      window.__WML_REDUX_INITIAL_STATE__ = { ... }
       (function(e) {
         var t = e.document;
         BOOMR = e.BOOMR || {};
@@ -256,5 +273,49 @@ const run = () => {
 ```
 
 
-## Multipe entry points.
+## Electrode React App.
+
+The `electrode-archetype-react-app` plugin support the app configuration with multiple entry points and allows to select JS and CSS bundles (or "chunks" in the Webpack terms) based on request data. By default, without any configuration, only "main" JS and CSS chunks will be used.
+
+Webpack will create bundles for each app entry point. To do that, place entry.config.js module into your app's client directory:
+
+Here is an example of entry.config.js:
+
+    module.exports = {
+      "web": "./app-web.js",
+      "ios": "./app-ios.js",
+      "android": "./app-android.js"
+    };
+
+In order to allow specific chunks selection, use bundleChunkSelector configuration option:
+
+    const config = {
+      plugins: {
+        "@walmart/electrode-react-webapp": {
+          options: {
+            bundleChunkSelector: "./server/chunk-selector.js",
+            ...
+          }
+    };
+
+Here chunk-selector.js is a JS module that should be implemented by the application. This module should export the function that implements the bundle selection logic:
+
+module.exports = function (request) {
+  const userAgent = request.headers["user-agent"].toLowerCase();
+
+  if (userAgent.indexOf("wmtapp") > 0) {
+    return {
+      js: "mobile",
+      css: "mobile"
+    };
+  }
+
+  return {
+    js: "web",
+    css: "web"
+  };
+};
+
+This code assumes that the app has 2 entry points named "mobile" and "web" declared as entry points in the app's Webpack config.
+
 

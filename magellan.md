@@ -18,7 +18,11 @@ as done with boilerplate-ngithwatch repo.
     https://github.com/TestArmada/boilerplate-nightwatch
 
 Magellan is to launch browsers and parallel run tests.
+
 test/automation/lib/script/common.sh
+
+DRPO: data provider for testarmada test
+# change file location to ${REPO_ROOT}/test/automation/conf/data
 
     DPRO_LOCATION=./test/automation/conf/data/  NODE_CONFIG_DIR=./test/automation/config magellan --browser=chrome --config=test/automation/magellan.json --serial
 

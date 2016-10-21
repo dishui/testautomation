@@ -18,10 +18,31 @@ as done with boilerplate-ngithwatch repo.
     https://github.com/TestArmada/boilerplate-nightwatch
 
 Magellan is to launch browsers and parallel run tests.
+test/automation/lib/script/common.sh
 
     DPRO_LOCATION=./test/automation/conf/data/  NODE_CONFIG_DIR=./test/automation/config magellan --browser=chrome --config=test/automation/magellan.json --serial
 
     "nightwatch_config": "./test/automation/conf/nightwatch.json"
+
+Or just run one test case.
+
+    DPRO_LOCATION=./test/automation/conf/data/ NODE_CONFIG_DIR=./test/automation/config magellan --nightwatch_config test/automation/conf/nightwatch.json --max_workers=1 --max_test_attempts=1 --browser=chrome --group=test/automation/tests/integration/verifyP13N.js
+
+To launch mock server, and start node with NODE_APP_INSTANCE=mock.
+This will make the server use mock configuration under config/.
+NODE_APP_INSTANCE=mock, immediately following the load of default.json, a file by the name of default-mock.json will be loaded if present, or hostname-mock.json.
+
+  node test/automation/mocks/run-mock-server-console.js 
+  NODE_APP_INSTANCE=mock node server
+
+  http://dev.walmart.com:3000/product/16480941
+
+  Now you will see mock data.
+
+To Run Real, 
+
+  NODE_ENV=development node server
+
 
 ### Nightwatch
 

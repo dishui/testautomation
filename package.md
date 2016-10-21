@@ -1,5 +1,17 @@
 # Packaging
 
+## JQuery
+    "jquery-ui": "1.12.x",
+    "react-day-picker": "^2.3.3",
+    "react-dnd": "^2.0.2",
+    "react-dnd-html5-backend": "^2.0.0",
+    "react-overlays": "^0.6.5",
+    "react-select": "^0.8.2",
+    "rickshaw": "^1.5.1",
+    
+  npm i jquery --save
+  import $ from 'jquery'; 
+
 ## Build and Deploy
 
 build is done with builder run build and dist/ directory is created contains bundle.js and css.
@@ -89,7 +101,7 @@ Other analytics scripts.
             ccm: { ... }
       };
       window._wml.seoTags = (function e(r) { ... })({configs:...})
-      window.__WML_REDUX_INITIAL_STATE__ = { ... }
+      window.__WML_REDUX_INITIAL_STATE__ = { ... }  // JSON.stringify(store)
       (function(e) {
         var t = e.document;
         BOOMR = e.BOOMR || {};
@@ -146,9 +158,123 @@ extendRequire({assetsFile: "dist/isomorphic-assets.json"})
   })
 ```
 
-## Redux Route Engine
+## Bootstrapping React application electrode-react-webapp and SSR template/index.jsx
 
-Electrode server app.js init redux router engine that exports fn to take request object and fill redux store data.
+Setup page header scripts and populate _wml.config with info known from server.
+
+    import Cookies from "@walmart/electrode-cookies";
+    const strip = (text) => text.replace(/^\s*|\s*$/gm, "");
+    const dynamicDataLoaderSrc = scriptLoader.loadDynamicDataLoader();
+    const defaultCdnHost = "i5.walmartimages.com";
+    // An empty script act as a dummy to trick torbit to rewrite the URL so we can
+    // look it up and extract the rewritten host name.  It will have the async attr.
+    const dummyScript = `//${defaultCdnHost}/dfw/63fd9f59-c534/7237d572-0c98-4eab-974b-3b694e72f5ba/v1/ft.js`;
+
+    const _wmlInitScripts = [`window._wml = {defaultCdnHost: "${defaultCdnHost}"};`];
+
+    const wmlDataResolver = strip(`(function () {
+      _wml.config = {ccm: data.get("ccm"), ui: data.get("uiConfig"), expoCookies: data.get("expoCookies")};
+      _wml.correlationId = data.get("correlationId");
+      _wml.jwt = data.get("jwt");
+      _wml.envInfo = data.get("envInfo");
+      window._exp = data.get("expData");
+    })();`);
+
+    class Index extends React.Component {
+       _dynamicDataScript() {
+        const {ccm, jwt, correlationId, uiConfig, envInfo} = this.props;
+        const jwtScr = jwt ? `_wml.jwt = "${jwt}";` : "";
+        const expoCookies = this._getExpoCookies();
+        return `_wml.config = {
+          ccm: ${JSON.stringify(ccm)},
+          ui: ${JSON.stringify(uiConfig)},
+          expoCookies: ${JSON.stringify(expoCookies)}
+        };
+      }
+
+      _injectScripts(scripts) {
+        return scripts.map((scripts) =>
+          typeof scripts === "string" ?
+            <script dangerouslySetInnerHTML={{__html:scripts}}/> :
+            scripts.map((scr) => <script {...scr} />));
+      }
+
+      render() {
+        const {ccm, jwt, correlationId, uiConfig, noPciCompliance, envInfo, typekitId, metaTags, isMobile} = this.props;
+        const typeKitSrc = scriptLoader.loadTypeKit(typekitId);
+
+        const scripts = [
+          typeKitSrc,
+          noPciCompliance ? "" : dynamicDataLoaderSrc,
+          noPciCompliance ? "" : wmlDataResolver,
+          noPciCompliance ? this._dynamicDataScript() : ""
+        ].concat(this.props.unbundledJS.enterHead);
+    }
+
+
+## Inject Initial COmponent HTML and State with Redux Route Engine
+
+  https://github.com/electrode-io/electrode-redux-router-engine/blob/master/lib/redux-router-engine.js#L19
+
+1. The first thing that we need to do on every request is create a new Redux store instance. The only purpose of this store instance is to provide the initial state of our application.
+2.  Wrap the router to App page inside <Provider store={store}> to so all components can access store data
+    const html = renderToString(
+        <Provider store={store}>
+          <App />
+        </Provider>
+    )
+    const preloadedState = store.getState()
+
+    // Send the rendered page back to the client
+    res.send(renderFullPage(html, preloadedState))
+
+   
+   <script>
+      window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
+   </script>
+
+   const getBootstrapScript = function getBootstrapScript(storeState) {
+     return `window.__WML_REDUX_INITIAL_STATE__ = ${encodeScript(JSON.stringify(storeState))};`;
+   };
+
+
+3. On the client side, client/app.jsx, grab the store data and create the store again.
+
+    // Grab the state from a global injected into server-generated HTML
+    const preloadedState = window.__PRELOADED_STATE__
+    const initialState = window.__WML_REDUX_INITIAL_STATE__;
+    // Create Redux store with initial state
+    const store = configureStore(initialState);
+    const store = createStore(counterApp, preloadedState)
+
+    // Note: Change suffix to `.js` if not using actual JSX.
+    ReactDOM.render((
+        <ElectrodeApplication
+          canary={canary}
+          canaryMessage={canaryMessage}
+          canaryRules={canaryRules}
+          onAnalyticsEvent={analyticsHandler}>
+          <Provider store={store}>
+            <Router history={browserHistory}>{routes}</Router>
+          </Provider>
+        </ElectrodeApplication>
+      ),
+      rootEl
+    );
+
+## Electrode server app.js init redux router engine that exports fn to take request object and fill redux store data.
+
+Redux router engine takes `createReduxStore` fn and create the store, and render store data and html string to response.
+
+    return (options.createReduxStore || this.options.createReduxStore).call(this, req, match)
+      .then((store) => {
+        return {
+          status: 200,
+          html: this._renderToString(req, store, match, withIds),
+          prefetch: stringifyPreloadedState(store.getState())
+        };
+      });
+
 
 server/index.js extendRequire electrode-server with configs and set up fetch listener.
 ```
@@ -319,3 +445,304 @@ module.exports = function (request) {
 This code assumes that the app has 2 entry points named "mobile" and "web" declared as entry points in the app's Webpack config.
 
 
+## WebPack
+
+NODE_ENV=production webpack --config ${npm_package_config_archetype}/config/webpack/webpack.config.js --colors
+
+staticPaths Plugin: static files path prefix "dist"
+
+1. we are using webpack-config to merge base.js and flow on top configs from different envs.
+  https://www.npmjs.com/package/webpack-config
+
+    var _ = require("lodash");
+    var mergeWebpackConfig = require("webpack-partial").default;
+    var WebpackConfig = require("webpack-config").default;
+    var getRootConfig = require("./get-root-config");
+
+    var baseConfig = require("./base.js");
+    var defineConfig = require("./partial/define.js");
+    var optimizeConfig = require("./partial/optimize");
+    var localesConfig = require("./partial/locales");
+    var productionSourcemapsConfig = require("./partial/sourcemaps-remote");
+
+    module.exports = new WebpackConfig().merge(_.flow(
+      mergeWebpackConfig.bind(null, {}, baseConfig),
+      optimizeConfig(),
+      localesConfig(),
+      defineConfig(),
+      productionSourcemapsConfig()
+    )()).merge(getRootConfig("webpack.config.dev.js"));
+
+2. base.js defines base webpack config js object.
+
+a. multiple entry points checked.
+    var archetypeNodeModules = path.join(__dirname, "../../node_modules");
+    
+    var archetypeDevNodeModules = path.join(
+      // A normal `require.resolve` looks at `package.json:main`. We instead want
+      // just the _directory_ of the module. So use heuristic of finding dir of
+      // package.json which **must** exist at a predictable location.
+      path.dirname(require.resolve("@walmart/electrode-archetype-react-app-dev/package.json")),
+      "node_modules"
+    );
+
+    var context = path.join(process.cwd(), "client");
+    function appEntry() {
+      var entryPath = path.join(context, "entry.config.js");  // client/entry.config.js
+
+      /* eslint-disable no-console, global-require */
+      try {
+        return require(entryPath);
+      } catch (ex) {
+        console.log("Entry point configuration is not found, using default entry point...");
+      }
+      /* eslint-enable no-console, global-require */
+      return fs.existsSync(path.join(context, "app.js")) ? "./app.js" : "./app.jsx";
+    }
+
+b. output bundle and resolver.
+    var entry = appEntry();
+    var multiBundle = _.isObject(entry);
+
+    var baseConfig = {
+      __wmlMultiBundle: multiBundle,
+      cache: true,
+      context: context,
+      debug: false,
+      entry: entry,
+      output: {
+        path: path.join(process.cwd(), "dist/js"),
+        pathinfo: inspectpack ? true : false, // Enable path information for inspectpack
+        filename: multiBundle
+          ? "[name].bundle.[hash].js"
+          : "bundle.[hash].js"
+      },
+      resolve: {
+        root: [archetypeNodeModules, archetypeDevNodeModules, process.cwd()],
+        modulesDirectories: ["client", "node_modules", "node_modules/@walmart"],
+        extensions: ["", ".js", ".jsx"]
+      },
+      resolveLoader: {
+        root: [archetypeNodeModules, archetypeDevNodeModules, process.cwd()]
+      }
+    };
+
+    module.exports = _.flow(
+      mergeWebpackConfig.bind(null, {}, baseConfig),
+      babelConfig(),
+      extractStylesConfig(),
+      fontsConfig(),
+      imagesConfig(),
+      statsConfig(),
+      isomorphicConfig(),
+      jsonConfig()
+    )();
+
+
+4. For 3rd party Vender, config/vendor/webpack.config.js
+
+    "use strict";
+
+    var get = require("lodash/get");
+    var filter = require("lodash/filter");
+    var flow = require("lodash/flow");
+    var path = require("path");
+    var mergeWebpackConfig = require("webpack-partial").default;
+
+    var baseConfig = require("@walmart/electrode-archetype-react-app/config/webpack/base");
+    var defineConfig = require("@walmart/electrode-archetype-react-app/config/webpack/partial/define");
+    var optimizeConfig = require("@walmart/electrode-archetype-react-app/config/webpack/partial/optimize");
+
+    var VENDOR_PATH = path.join(process.cwd(), "config/vendor/ads");
+
+    var vendorConfig = function () {
+      return function (config) {
+        return mergeWebpackConfig(config, {
+          entry: path.join(VENDOR_PATH, "load-ads.js"),
+          output: {
+            path: VENDOR_PATH,
+            filename: "load-ads.min.js"
+          }
+        });
+      };
+    };
+
+    // Utter hack allowing to reuse the archetype webpack config and in the meantime to not generate
+    // source maps and stats for the tealeaf bundle.
+    baseConfig.plugins = filter(baseConfig.plugins, function (plugin) {
+      return get(plugin, "opts.filename", "").indexOf("stats") === -1;
+    });
+
+    module.exports = flow(
+      mergeWebpackConfig.bind(null, {}, baseConfig),
+      optimizeConfig(),
+      defineConfig(),
+      vendorConfig()
+    )();
+
+5. From gulp task, we call webpack.
+  https://github.com/electrode-io/electrode-archetype-react-app/blob/90b2c0e8b575ed2ff4d0ac41d3a1ac8eb08c1865/arch-gulpfile.js
+  
+  gulpfile.js just require the react-app which has the webpack defined.
+
+    require("electrode-archetype-react-app")();
+  
+  Now gulp tasks are defined.
+    /*
+     *
+     * For information on how to specify a task, see:
+     *
+     * https://www.npmjs.com/package/electrode-gulp-helper#taskdata
+     *
+     */
+    const tasks = {  
+        "build-dist-dev-static": {
+          desc: false,
+          task: `webpack --config ${config.webpack}/webpack.config.dev.static.js --colors`
+        },
+        "build-dist-min": {
+          dep: [".production-env"],
+          desc: false,
+          task: `webpack --config ${config.webpack}/webpack.config.js --colors`
+        },
+      }
+    }
+
+6. Static path.
+
+  By default, the static files are served from dist under CWD.
+
+  config/default.json
+    "pathPrefix": "dist"
+
+  Route /html will serve files from dist/html
+  Route /js will serve files from dist/js
+  Route /images will serve files from dist/images
+
+    const config = require("electrode-confippet").config;
+    const staticPathsDecor = require("electrode-static-paths");
+    const supports = require("electrode-archetype-react-app/supports");
+
+    supports.cssModuleHook({
+      generateScopedName: "[name]__[local]___[hash:base64:5]"
+    });
+
+    require("electrode-server")(config, [staticPathsDecor()]);
+
+7. assets.json
+
+After gulp dev, the .isomorphic-loader-config.json will be created.
+    {
+      "valid": true,
+      "version": "1.6.0",
+      "timestamp": 1477003340802,
+      "context": "client",
+      "output": {
+        "path": "/",
+        "filename": "bundle.dev.js",
+        "publicPath": "http://localhost:2992/js/"
+      },
+      "assets": {
+        "marked": {},
+        "chunks": {
+          "main": [
+            "bundle.dev.js",
+            "style.65199902dc266f14ecf0.css",
+            "style.css",
+            "bundle.dev.js.map",
+            "style.65199902dc266f14ecf0.css.map",
+            "style.css.map"
+          ]
+        }
+      },
+      "webpackDev": {
+        "skipSetEnv": false,
+        "url": "http://localhost:2992",
+        "addUrl": false
+      },
+      "isWebpackDev": true,
+      "assetsFile": "/isomorphic-assets.json"
+    }
+
+In dist/isomorphic-assets.json
+    {
+      "marked": {},
+      "chunks": {
+        "main": [
+          "bundle.7984e1c64fc102cdea0a.js",
+          "style.7984e1c64fc102cdea0a.css",
+          "../map/bundle.7984e1c64fc102cdea0a.js.map",
+          "../map/style.7984e1c64fc102cdea0a.css.map"
+        ]
+      }
+
+server/plugins/webapp/index.js is hapi plugin that hander route to /.
+
+    const registerRoutes = (server, options, next) => {
+      return Promise.try(() => loadAssetsFromStats(pluginOptions.stats))
+          .then((assets) => {
+            const devServer = pluginOptions.devServer;
+            pluginOptions.__internals = {
+              assets,
+              devJSBundle: `http://${devServer.host}:${devServer.port}/js/bundle.dev.js`,
+              devCSSBundle: `http://${devServer.host}:${devServer.port}/js/style.css`
+            };
+
+            _.each(options.paths, (v, path) => {
+              assert(v.content, `You must define content for the webapp plugin path ${path}`);
+              server.route({
+                method: "GET",
+                path,
+                config: v.config || {},
+                handler: makeRouteHandler(pluginOptions, resolveContent(v.content))
+              });
+            });
+            next();
+          })
+          .catch(next);
+      };
+    }
+
+  function makeRouteHandler(options, userContent) {
+    const CONTENT_MARKER = "{{SSR_CONTENT}}";
+    const BUNDLE_MARKER = "{{WEBAPP_BUNDLES}}";
+    const TITLE_MARKER = "{{PAGE_TITLE}}";
+    const PREFETCH_MARKER = "{{PREFETCH_BUNDLES}}";
+    const WEBPACK_DEV = options.webpackDev;
+    const RENDER_JS = options.renderJS;
+    const RENDER_SS = options.serverSideRendering;
+    const html = fs.readFileSync(Path.join(__dirname, "index.html")).toString();
+
+    return (request, reply) => {
+      const renderPage = (content) => {
+      return html.replace(/{{[A-Z_]*}}/g, (m) => {
+        switch (m) {
+        case CONTENT_MARKER:
+          return content.html || "";
+        case TITLE_MARKER:
+          return options.pageTitle;
+        case BUNDLE_MARKER:
+          return makeBundles();
+        case PREFETCH_MARKER:
+          return addPrefetch(content.prefetch);
+        default:
+          return `Unknown marker ${m}`;
+        }
+      });
+    };
+
+  }
+
+## Source Maps Example
+
+Load the URL in your browser. We'll use Chrome: http://logger.walmart.com/
+Get the hash revision. From Chrome dev tools console execute: console.log(window._wml.config.ui.applicationSha) . Here it returns: 229ee67e159f5956aa98066cddde2a35c5d2bb9d
+From your device terminal, git checkout the revision: git checkout 229ee67e159f5956aa98066cddde2a35c5d2bb9d
+Update the frontend:
+
+$ cd project
+$ builder run build
+From project folder run: builder run server. You should get the following log: Started connect web server on http://0.0.0.0:3000
+
+Go back to the browser and reload the url: http://logger.walmart.com/
+Check the source maps are being loaded: in chrome dev tools, network tab, XHR tag. *.map files should be loaded.

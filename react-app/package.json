@@ -1,0 +1,144 @@
+{
+  "_args": [
+    [
+      {
+        "name": "@walmart/electrode-archetype-react-app",
+        "raw": "@walmart/electrode-archetype-react-app@9.1.0",
+        "rawSpec": "9.1.0",
+        "scope": "@walmart",
+        "spec": "9.1.0",
+        "type": "version"
+      },
+      "/app/workspace-atlas/react/product"
+    ]
+  ],
+  "_from": "@walmart/electrode-archetype-react-app@9.1.0",
+  "_id": "@walmart/electrode-archetype-react-app@9.1.0",
+  "_inCache": true,
+  "_location": "/@walmart/electrode-archetype-react-app",
+  "_nodeVersion": "4.5.0",
+  "_npmUser": {
+    "email": "mbrouch@walmartlabs.com",
+    "name": "mbrouch"
+  },
+  "_npmVersion": "3.10.7",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "@walmart/electrode-archetype-react-app",
+    "raw": "@walmart/electrode-archetype-react-app@9.1.0",
+    "rawSpec": "9.1.0",
+    "scope": "@walmart",
+    "spec": "9.1.0",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://npme.walmart.com/@walmart/electrode-archetype-react-app/-/electrode-archetype-react-app-9.1.0.tgz",
+  "_shasum": "e479b28b70aacc46c1ce84225b5e84344be3a285",
+  "_shrinkwrap": null,
+  "_spec": "@walmart/electrode-archetype-react-app@9.1.0",
+  "_where": "/app/workspace-atlas/react/product",
+  "bugs": {
+    "url": "https://gecgithub01.walmart.com/electrode/electrode-archetype-react-app/issues"
+  },
+  "config": {
+    "archetype": "node_modules/@walmart/electrode-archetype-react-app"
+  },
+  "dependencies": {},
+  "description": "Builder Archetype - Electrode App",
+  "devDependencies": {
+    "babel-eslint": "^4.1.8",
+    "builder": "^2.9.1",
+    "builder-support": "^0.2.0",
+    "eslint": "^2.13.1",
+    "eslint-config-walmart": "^1.1.0",
+    "eslint-plugin-filenames": "^1.1.0",
+    "eslint-plugin-react": "^3.16.1"
+  },
+  "dist": {
+    "shasum": "e479b28b70aacc46c1ce84225b5e84344be3a285",
+    "tarball": "http://npme.walmart.com/@walmart/electrode-archetype-react-app/-/electrode-archetype-react-app-9.1.0.tgz"
+  },
+  "engines": {
+    "node": "^4.2.6",
+    "npm": "^3.5.3"
+  },
+  "gitHead": "84ea13eb2e4084c1137797539dfbe5af4febaa03",
+  "homepage": "https://gecgithub01.walmart.com/electrode/electrode-archetype-react-app/README.md",
+  "license": "UNLICENSED",
+  "maintainers": [
+    {
+      "email": "mbrouch@walmartlabs.com",
+      "name": "mbrouch"
+    }
+  ],
+  "name": "@walmart/electrode-archetype-react-app",
+  "optionalDependencies": {},
+  "readme": "# Builder Archetype: Electrode React App\n\nA Walmart Labs flavored react app archetype for [builder][].\n\n## tl;dr\n\n#### What is this for?\n\nThis \"app archetype\" provides for common patterns across all app projects so that each app project can standardize on common development behavior and patterns. Its essentially pre-made patterns for npm scripts.\n\n#### How do I start developing in my application project after installing?\n\n```bash\n# This runs both the node server and webpack (in hot mode)\n$ builder run hot\n\n# Also try `dev` mode when running off battery power and you wish to maximize battery life.\n$ builder run dev\n```\n\n#### What is `hot mode`?\n\n`Hot mode` is where webpack transpiles your javascript and css code and continues to watch for any changes, and, builds and loads only the code that has changed on disk. It allows you to develop without re-loading your browser page as the changes will be automagically piped in.\n\n#### How do I run my application tests?\n\n```bash\n# This will run test eslint and your spec tests\n$ builder run check\n```\n\n#### How do I run my application tests without going through eslint (i.e., while I'm developing)?\n\n```bash\n# This will run only your spec tests\n$ builder run test-dev\n```\n\n#### Why can't my test and code changes get automatically run with the tests?  Why do the tests take so long to start?\n\n```bash\n# This will start a webpack-dev-server to hot watch your code and also start a karma test browser that auto-reruns when specs or client code changes.\n$ builder run test-watch-all\n```\n\n#### How do I use and/or view the final build files without minifying/uglifying but also with sourcemaps?\n\n```bash\n# This will build your code and save to disk, and then start a node server (without using webpack-dev-server).\n$ builder run dev-static\n```\n\n#### Is there anything else that might be nice for my development?\n\n```bash\n# This will start the node server in debug mode so that you can place breakpoints, \"debugger\" statements, or use `node-inspector`.\n$ builder run debug\n```\n\n#### How do I enable CSS Modules and CSS Next?\n\nBy default, this archetype assumes your app and components are using Stylus and `.styl` files containing Global CSS. If you want to use CSS Modules + CSS Next, you need opt-in\nand use `.css` files. This archetype does not support using Stylus and CSS Modules + CSS Next together.\nYou can opt-in to CSS Modules + CSS Next by adding a `config` section to your *project's* `package.json` and setting the\nnecessary env variable to `true`:\n\n```\n\"config\": {\n  \"electrode_archetype_react_app_webpack_css_modules\": \"true\"\n}\n```\n\n#### How do I fix the following nodemon and/or babel error in my project?\n\n```bash\n[builder:proc:start] Command: nodemon --watch client --watch client --watch server --watch config server/index.js --exec node\n[nodemon] 1.8.1\n[nodemon] to restart at any time, enter `rs`\n[nodemon] watching: $HOME/walmart/my-electrode-project/client/**/* $HOME/walmart/my-electrode-project/client/**/* $HOME/walmart/my-electrode-project/server/**/* $HOME/walmart/my-electrode-project/config/**/*\n[nodemon] starting `babel-node server/index.js`\nYou have mistakenly installed the `babel` package, which is a no-op in Babel 6.\nBabel's CLI commands have been moved from the `babel` package to the `babel-cli` package.\n\n    npm uninstall babel\n    npm install babel-cli\n```\n\nEnsure that you have removed only have `babel-cli`, `babel-core`, and `babel-loader` installed, and that you have removed `babel` and `babel-runtime`.\n\n#### How do I view my test result in the browser?\n\nRun either of the below commands before opening the link.\n\n```\nbuilder run server-test\nbuilder run dev # (OR) (which includes `server-test`)\nbuilder run hot # (OR) (which includes `server-test`)\n```\nThis will serve the static assets for test.html\n\nopen [test.html]((http://localhost:3001/node_modules/%40walmart/electrode-archetype-react-app/config/browser_test/test.html)) to view test result.\n\n#### How do I build assets for optimization analysis with `inspectpack`?\n\n[inspectpack](https://github.com/FormidableLabs/inspectpack) uses a production Webpack build with\nthe following tweaks:\n\n* `output.pathinfo` enabled\n* Minification disabled\n\nWe provide the convenient env variable `npm_package_config_inspectpack_debug` to enable this. So\nto create a JS bundle capable of ingestion into `inspectpack`, simply do:\n\n```sh\n$ INSPECTPACK_DEBUG=true builder run build\n```\n\n\n## Installation\n\nIf you want to use `builder` as a CLI tool (recommended), follow the instructions at [formidablelabs/builder to modify your `PATH`](https://github.com/formidablelabs/builder#local-install)\n\n###### run the following in your project\n```bash\n$ npm install --save builder @walmart/electrode-archetype-react-app @walmart/electrode-archetype-react-app-dev\n\n# As a part of the peerDependencies in `@walmart/electrode-archetype-react-app-dev`, you will also need to install at least the following:\n$ npm install --save extract-text-webpack-plugin webpack-partial webpack-stats-plugin isparta-loader\n```\n\n###### Add a `.builderrc`\nThe `.builderrc` should contain the following and be located in the root of your project\n\n```yaml\n---\narchetypes:\n  - \"@walmart/electrode-archetype-react-app\"\n```\n\n###### Add a `.babelrc` to your project\nThe `.babelrc` needs to extend\n[the archetype's babel configuration](config/babel/.babelrc) in order to apply the presents (ES2015, React) and the plugins like i18n. If your project needs additional Babel settings (like using stage 0 features) you can add them to this file. See the [Babel docs](https://babeljs.io/docs/usage/babelrc/) for more information.\n\n```json\n{\n  \"extends\": \"./node_modules/@walmart/electrode-archetype-react-app/config/babel/.babelrc\"\n}\n```\n\n###### Use `babel-core/register` in your server entry point\n\nIf you don't have a build step for your server code, then you must transpile\non the fly using `babel-register`. For performance reasons, we recommend\nwhitelisting the `react` module to be transpiled as well, so that the\n`transform-node-env-inline` plugin gets applied to the React codebase:\n\n```js\nrequire(\"babel-core/register\")({\n  ignore: /node_modules\\/(?!react\\/)/\n});\n```\n\n###### Define client entry points\n\nBy default, the archetype uses `client/app.js` or `client/app.jsx` as a client entry point. Alternatively,\nyou can define multiple entry points for your application, so the Webpack will create bundles for each app\nentry point. To do that, place `entry.config.js` module into your app's `client` directory:\n\nHere is an **example** of `entry.config.js`:\n```js\nmodule.exports = {\n  \"web\": \"./app-web.js\",\n  \"ios\": \"./app-ios.js\",\n  \"android\": \"./app-android.js\"\n};\n```\n\n## Tasks\n\n```\n$ builder help\n\n[builder:help]\n\nUsage:\n\n  builder <action> <task(s)>\n\nActions:\n\n  run, concurrent, envs, help\n\nFlags: General\n\n  --builderrc: Path to builder config file (default: `.builderrc`)\n\n  --help: Display help and exit\n\n  --version: Display version and exit\n\nTasks:\n\n  npm:test\n    [@walmart/electrode-archetype-react-app] builder run check\n\n  build\n    [@walmart/electrode-archetype-react-app] builder run build-dist\n\n  build-dev-static\n    [@walmart/electrode-archetype-react-app] builder run clean-dist && builder run build-dist-dev-static\n\n  build-dist\n    [@walmart/electrode-archetype-react-app] builder run clean-dist && builder run build-dist-min\n\n  build-dist-dev-static\n    [@walmart/electrode-archetype-react-app] webpack --config node_modules/@walmart/electrode-archetype-react-app/config/webpack/webpack.config.dev.static.js --colors\n\n  build-dist-min\n    [@walmart/electrode-archetype-react-app] webpack --config node_modules/@walmart/electrode-archetype-react-app/config/webpack/webpack.config.js --colors\n\n  check\n    [@walmart/electrode-archetype-react-app] builder run lint && builder run test-cov\n\n  check-ci\n    [@walmart/electrode-archetype-react-app] builder run lint && builder run test-ci\n\n  check-cov\n    [@walmart/electrode-archetype-react-app] builder run lint && builder run test-cov\n\n  check-dev\n    [@walmart/electrode-archetype-react-app] builder run lint && builder run test-dev\n\n  clean\n    [@walmart/electrode-archetype-react-app] builder run clean-dist\n\n  clean-dist\n    [@walmart/electrode-archetype-react-app] rimraf dist\n\n  debug\n    [@walmart/electrode-archetype-react-app] builder run build-dev-static && builder run server-debug\n\n  dev\n    [@walmart/electrode-archetype-react-app] WEBPACK_DEV=true builder concurrent server-dev server-watch\n\n  dev-static\n    [@walmart/electrode-archetype-react-app] builder run build-dev-static && builder run server\n\n  hot\n    [@walmart/electrode-archetype-react-app] WEBPACK_DEV=true builder concurrent server-hot server-watch\n\n  lint\n    [@walmart/electrode-archetype-react-app] builder concurrent lint-client lint-client-test lint-server lint-server-test\n\n  lint-client\n    [@walmart/electrode-archetype-react-app] eslint --ext .js,.jsx -c node_modules/@walmart/electrode-archetype-react-app/config/eslint/.eslintrc-react client templates\n\n  lint-client-test\n    [@walmart/electrode-archetype-react-app] eslint --ext .js,.jsx -c node_modules/@walmart/electrode-archetype-react-app/config/eslint/.eslintrc-react-test test/client\n\n  lint-server\n    [@walmart/electrode-archetype-react-app] eslint -c node_modules/@walmart/electrode-archetype-react-app/config/eslint/.eslintrc-node server\n\n  lint-server-test\n    [@walmart/electrode-archetype-react-app] eslint -c node_modules/@walmart/electrode-archetype-react-app/config/eslint/.eslintrc-node test/server test/func\n\n  server\n    [@walmart/electrode-archetype-react-app] node server/index.js\n\n  server-debug\n    [@walmart/electrode-archetype-react-app] node debug server/index.js\n\n  server-dev\n    [@walmart/electrode-archetype-react-app] webpack-dev-server --config node_modules/@walmart/electrode-archetype-react-app/config/webpack/webpack.config.dev.js --progress --colors --port 2992\n\n  server-hot\n    [@walmart/electrode-archetype-react-app] webpack-dev-server --config node_modules/@walmart/electrode-archetype-react-app/config/webpack/webpack.config.hot.js --hot --progress --colors --port 2992 --inline\n\n  server-test\n    [@walmart/electrode-archetype-react-app] webpack-dev-server --config node_modules/@walmart/electrode-archetype-react-app/config/webpack/webpack.config.test.js --progress --colors --port 3001\n\n  server-watch\n    [@walmart/electrode-archetype-react-app] nodemon --ext js,jsx --watch client --watch server --watch config server/index.js --exec node\n\n  test-ci\n    [@walmart/electrode-archetype-react-app] builder run test-frontend-ci\n\n  test-cov\n    [@walmart/electrode-archetype-react-app] builder run test-frontend-cov\n\n  test-dev\n    [@walmart/electrode-archetype-react-app] builder run test-frontend-dev\n\n  test-frontend\n    [@walmart/electrode-archetype-react-app] karma start node_modules/@walmart/electrode-archetype-react-app/config/karma/karma.conf.js --colors\n\n  test-frontend-ci\n    [@walmart/electrode-archetype-react-app] karma start --browsers PhantomJS,Firefox node_modules/@walmart/electrode-archetype-react-app/config/karma/karma.conf.coverage.js --colors\n\n  test-frontend-cov\n    [@walmart/electrode-archetype-react-app] karma start node_modules/@walmart/electrode-archetype-react-app/config/karma/karma.conf.coverage.js --colors\n\n  test-frontend-dev\n    [@walmart/electrode-archetype-react-app] (pgrep -fl 'webpack-dev-server.*3001' && karma start node_modules/@walmart/electrode-archetype-react-app/config/karma/karma.conf.dev.js --colors) || builder run test-frontend\n\n  test-frontend-dev-watch\n    [@walmart/electrode-archetype-react-app] karma start node_modules/@walmart/electrode-archetype-react-app/config/karma/karma.conf.watch.js --colors --browsers Chrome --no-single-run --auto-watch\n\n  test-watch\n    [@walmart/electrode-archetype-react-app] (pgrep -fl 'webpack-dev-server.*3001' && builder run test-frontend-dev-watch) || builder run test-watch-all\n\n  test-watch-all\n    [@walmart/electrode-archetype-react-app] builder concurrent server-test test-frontend-dev-watch\n```\n\n[builder]: https://github.com/FormidableLabs/builder\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://gecgithub01.walmart.com/electrode/electrode-archetype-react-app.git"
+  },
+  "scripts": {
+    "build": "builder run build-dist",
+    "build-browser-coverage": "builder run clean-dist && NODE_ENV=production webpack --config ${npm_package_config_archetype}/config/webpack/webpack.config.browsercoverage.js --colors && builder run build-dist:flatten-l10n && builder run build-dist:clean-tmp",
+    "build-dev-static": "builder run clean-dist && builder run build-dist-dev-static",
+    "build-dist": "builder run clean-dist && builder run build-dist-min && builder run build-dist:flatten-l10n && builder run build-dist:clean-tmp",
+    "build-dist-dev-static": "webpack --config ${npm_package_config_archetype}/config/webpack/webpack.config.dev.static.js --colors",
+    "build-dist-min": "NODE_ENV=production webpack --config ${npm_package_config_archetype}/config/webpack/webpack.config.js --colors",
+    "build-dist:clean-tmp": "rimraf ./tmp",
+    "build-dist:flatten-l10n": "node ${npm_package_config_archetype}/scripts/l10n/flatten-messages.js",
+    "builder:check": "npm run builder:lint",
+    "builder:lint": "npm run builder:lint-server",
+    "builder:lint-server": "eslint --color -c config/eslint/.eslintrc-node config/karma config/webpack",
+    "builder:prepublish": "builder-support gen-dev",
+    "check": "builder run lint && builder run test-cov",
+    "check-ci": "builder run lint && builder run test-ci",
+    "check-cov": "builder run lint && builder run test-cov",
+    "check-dev": "builder run lint && builder run test-dev",
+    "clean": "builder run clean-dist",
+    "clean-dist": "rimraf dist",
+    "cov-frontend": "istanbul check-coverage 'coverage/client/*/coverage.json' --config=${npm_package_config_archetype}/config/istanbul/.istanbul.yml",
+    "cov-frontend-50": "istanbul check-coverage 'coverage/client/*/coverage.json' --config=${npm_package_config_archetype}/config/istanbul/.istanbul.50.yml",
+    "cov-frontend-70": "istanbul check-coverage 'coverage/client/*/coverage.json' --config=${npm_package_config_archetype}/config/istanbul/.istanbul.70.yml",
+    "cov-frontend-85": "istanbul check-coverage 'coverage/client/*/coverage.json' --config=${npm_package_config_archetype}/config/istanbul/.istanbul.85.yml",
+    "cov-frontend-95": "istanbul check-coverage 'coverage/client/*/coverage.json' --config=${npm_package_config_archetype}/config/istanbul/.istanbul.95.yml",
+    "debug": "builder run build-dev-static && builder run server-debug",
+    "dev": "WEBPACK_DEV=true builder concurrent server-dev server-watch",
+    "dev-static": "builder run build-dev-static && builder run server",
+    "hot": "WEBPACK_DEV=true builder concurrent server-hot server-watch",
+    "install-dev-peer-dep": "PEER_DEPS=\"`node ${npm_package_config_archetype}/scripts/list-peer-dep.js dev`\"; if [ -n \"$PEER_DEPS\" ]; then npm i --save-dev $PEER_DEPS; fi",
+    "install-peer-dep": "PEER_DEPS=\"`node ${npm_package_config_archetype}/scripts/list-peer-dep.js`\"; if [ -n \"$PEER_DEPS\" ]; then npm i --save $PEER_DEPS; fi",
+    "lint": "builder concurrent lint-client lint-client-test lint-server lint-server-test",
+    "lint-client": "eslint --ext .js,.jsx -c ${npm_package_config_archetype}/config/eslint/.eslintrc-react client templates",
+    "lint-client-test": "eslint --ext .js,.jsx -c ${npm_package_config_archetype}/config/eslint/.eslintrc-react-test test/client",
+    "lint-server": "eslint -c ${npm_package_config_archetype}/config/eslint/.eslintrc-node server",
+    "lint-server-test": "eslint -c ${npm_package_config_archetype}/config/eslint/.eslintrc-mocha-test test/server test/func",
+    "npm:release": "node ${npm_package_config_archetype}/scripts/map-isomorphic-cdn.js",
+    "npm:test": "builder run check",
+    "optimize-stats": "OPTIMIZE_STATS=true builder run build && builder run optimize-stats-gen",
+    "optimize-stats-gen": "node ${npm_package_config_archetype}/scripts/gen-optimize-stats.js dist/js/bundle.*.js > optimize-stats.txt",
+    "server": "node server/index.js",
+    "server-debug": "node debug server/index.js",
+    "server-dev": "webpack-dev-server --config ${npm_package_config_archetype}/config/webpack/webpack.config.dev.js --progress --colors --port 2992",
+    "server-hot": "webpack-dev-server --config ${npm_package_config_archetype}/config/webpack/webpack.config.hot.js --hot --progress --colors --port 2992 --inline",
+    "server-test": "webpack-dev-server --config ${npm_package_config_archetype}/config/webpack/webpack.config.test.js --progress --colors --port 3001",
+    "server-watch": "nodemon --ext js,jsx --watch client --watch server --watch config server/index.js --exec node",
+    "test-ci": "builder run test-frontend-ci",
+    "test-cov": "builder run test-frontend-cov && builder run test-server-cov",
+    "test-dev": "builder run test-frontend-dev && builder run test-server-dev",
+    "test-frontend": "karma start ${npm_package_config_archetype}/config/karma/karma.conf.js --colors",
+    "test-frontend-ci": "karma start --browsers PhantomJS,Firefox ${npm_package_config_archetype}/config/karma/karma.conf.coverage.js --colors",
+    "test-frontend-cov": "karma start ${npm_package_config_archetype}/config/karma/karma.conf.coverage.js --colors",
+    "test-frontend-dev": "(pgrep -fl 'webpack-dev-server.*3001' && karma start ${npm_package_config_archetype}/config/karma/karma.conf.dev.js --colors) || builder run test-frontend",
+    "test-frontend-dev-watch": "karma start ${npm_package_config_archetype}/config/karma/karma.conf.watch.js --colors --browsers Chrome --no-single-run --auto-watch",
+    "test-server": "builder concurrent lint-server lint-server-test && builder run test-server-cov",
+    "test-server-cov": "if [ -d test/server ]; then istanbul cover _mocha -- -c --opts ${npm_package_config_archetype}/config/mocha/mocha.opts test/server; fi",
+    "test-server-dev": "if [ -d test/server ]; then mocha -c --opts ${npm_package_config_archetype}/config/mocha/mocha.opts test/server; fi",
+    "test-watch": "(pgrep -fl 'webpack-dev-server.*3001' && builder run test-frontend-dev-watch) || builder run test-watch-all",
+    "test-watch-all": "builder concurrent server-test test-frontend-dev-watch"
+  },
+  "version": "9.1.0"
+}

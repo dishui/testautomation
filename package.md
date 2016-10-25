@@ -451,6 +451,30 @@ NODE_ENV=production webpack --config ${npm_package_config_archetype}/config/webp
 
 staticPaths Plugin: static files path prefix "dist"
 
+Webpack config is composed and exported from electrode-archetype-react-app.
+
+    https://github.com/electrode-io/electrode-archetype-react-app/tree/master/config/webpack
+
+It used webpack-partial (https://github.com/webpack-config/webpack-partial) to compose entry/loader/plugin.
+base.js contains appEntry and babelConfig/isomorphicConfig.
+
+Webpack use babel-loader to transpiling es6. Babel config specifies module:{[loaders:[]]}
+  const webpackConfig = {
+    module.exports = {
+      entry: './src/app.js',
+      output: {
+        path: './bin',
+        filename: 'app.bundle.js',
+      },
+      module: {
+        loaders: [{
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader'
+      }]
+    }
+  }
+
 1. we are using webpack-config to merge base.js and flow on top configs from different envs.
   https://www.npmjs.com/package/webpack-config
 
@@ -539,16 +563,9 @@ b. output bundle and resolver.
     )();
 
 
-4. For 3rd party Vender, config/vendor/webpack.config.js
-
-    "use strict";
-
-    var get = require("lodash/get");
-    var filter = require("lodash/filter");
-    var flow = require("lodash/flow");
-    var path = require("path");
-    var mergeWebpackConfig = require("webpack-partial").default;
-
+4. For webpack dll bundle, we need 2 webpack config, one for 3rd party Vender, config/vendor/webpack.config.js, and one for app bundle.
+  
+  https://robertknight.github.io/posts/webpack-dll-plugins/
     var baseConfig = require("@walmart/electrode-archetype-react-app/config/webpack/base");
     var defineConfig = require("@walmart/electrode-archetype-react-app/config/webpack/partial/define");
     var optimizeConfig = require("@walmart/electrode-archetype-react-app/config/webpack/partial/optimize");

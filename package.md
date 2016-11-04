@@ -77,13 +77,11 @@ _wml.envInfo = {"APP_SHA":"0fcc24b5765d930d9a9d78aa165f2a3f6a0f90ee","APP_VERSIO
 ## Async loader, Little loader.
 
 At the bottom of the page, we load the `bundle.${build-id}.js`.
-    <script>
-        _wml.perf.mark("before-bundle")
-    </script>
+    <script> _wml.perf.mark("before-bundle") </script>
     <script src="https://i5.wal.co/dfw/63fd9f59-bc1c/7fb7089a-1cd2-4d7c-813a-5de7d05d0f86/v1/bundle.ad843d7ce38658e8c011.js"></script>
-    <script>
-        _wml.perf.mark("after-bundle")
-    </script>
+    // when running with `node server/index.js` on local dev, use relative.
+    <script src="/js/bundle.85fe1b9d873bf1077f0d.js"></script>
+    <script> _wml.perf.mark("after-bundle") </script>
 
     if (googleAds) {
       var googleScriptEl = document.createElement("script");
@@ -475,6 +473,8 @@ Webpack use babel-loader to transpiling es6. Babel config specifies module:{[loa
     }
   }
 
+Not supported override webpack configs.
+  https://github.com/electrode-io/electrode-archetype-react-component/issues/12
 1. we are using webpack-config to merge base.js and flow on top configs from different envs.
   https://www.npmjs.com/package/webpack-config
 

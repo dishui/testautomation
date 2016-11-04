@@ -61,20 +61,17 @@ OO_ASSEMBLY:products AND OO_ENV:prod\-a AND "/product/electrode/api/p13n" AND co
 
 OO_ASSEMBLY:products AND OO_ENV:prod\-a AND "/product/electrode/api/p13n" AND context_subtype:P\-END AND "page=Product"
 
+bin/kafka-topics.sh --zookeeper dal-kafka-zk00.bfd.walmart.com:9091 --list
+
+bin/kafka-console-consumer.sh --zookeeper dal-kafka-zk00.bfd.walmart.com:9091 --topic logmon.metrics
+
+bin/kafka-console-consumer.sh --zookeeper dal-kafka-zk00.bfd.walmart.com:9091 --topic logmon.heartbeat
+
   http://discovery-graylog.walmart.com/streams/57891326e8aede622eb2f6d5/search?interval=minute&width=1695&relative=172800&page=1&sortOrder=desc&q=OO_ASSEMBLY%3Aproducts%20AND%20OO_ENV%3Aprod%5C-a%20AND%20request_path%3A%5C%2Fproduct%5C%2Fapi%5C%2Fp13n%2A%20AND%20msg%3AResponse%20AND%20context_subtype%3AP%5C-END&rangetype=relative&fields=message%2Csource&sortField=timestamp
 
 
   {"name":"stdout","hostname":"m-c02m72h2fd59.homeoffice.wal-mart.com","pid":42487,"level":30,"tags":["info","splunk","logmon","fetch"],"context":null,"data":{"data":{"state":"end","index":12,"url":"http://irs-ws.prod-us.irs-ws.prod.walmart.com/irs-ws/irs/4.0?api_key=01&config_id=2&module=Product&modules_bit_field=0&client_guid=190a790e-b0f6-47e5-8657-edd79dcd8a74&page=Product&parent_item_id=16480941&sem=false&visitor_id=QHp-40xqMQ6fdiS5yegN-Q","receiveTime":699,"translateTime":52,"time":751,"totalTime":751,"retry":0}},"msg":"FETCH","time":"2016-10-17T21:03:17.834Z","v":0}
 
-
-## irs-ws/irs/4.0? call    
-    http://irs-ws.stg.irs-ws.prod.walmart.com/irs-ws/irs/4.0?jsonp=false&callback=&modules_bit_field=0&api_key=01&visitor_id=CpVbJ9zK4kWqPIBXH9Df7E&customer_id_enc=&config_id=6&parent_item_id=21128150,1085407,10450114,21311918,20595713&category=&facet=&dept=&thumbs=&to_shipping_threshold=&client_guid=3d427f54-6519-4471-8cca-6c51dd704843&mode=DATA&cache_pipeline=default
-
-    http://irs-ws.prod-us.irs-ws.prod.walmart.com/irs-ws/irs/4.0?jsonp=false&callback=&modules_bit_field=0&api_key=01&visitor_id=DGnzLK0tTQXzW2vk5tI2T4&customer_id_enc=&config_id=2&parent_item_id=15716903&category=&to_shipping_threshold=&client_guid=3177e07f-9d04-4c27-84cb-1f4ef1cf5a1d&mode=DATA&cache_pipeline&prettyPrint=true&debug=true
-
-    i%2424799089%2C0%3A5438%3A133198%3A1228782%3A1224689%3B10037756%2C0%3A4104%3A4113%3A5063%3B29114188%2C0%3A4104%3A4115%3A5096%3B30414219%2C0%3A4104%3A4115%3A5096%3B10984488%2C0%3A976759%3A976782%3A1001579%3A1001323%3B10450115%2C0%3A976759%3A1071964%3A976788%3A1001466%3B46519525%2C0%3A3944%3A3951%3A132982%3A1231068%3A1172199%3B
-
-    http://irs-ws.prod-us.irs-ws.prod.walmart.com/irs-ws/irs/4.0?api_key=01&config_id=72&module=ProductRvi&modules_bit_field=0&client_guid=bc2b211c-e87e-4816-8021-ee2868008e88&page=ProductRvi&parent_item_id=24799089%2C10037756%2C29114188%2C30414219%2C10984488%2C10450115%2C46519525&sem=false&visitor_id=VWvib58ddOEUz4UFOgem-s
 
 ######
 ## React
@@ -326,7 +323,6 @@ Canary Rules:
   . ~/bin/setenv.sh 
   catalina run
 
-
   Async action creator ajaxRequest/bootstrapP3N -> fetchWrapper -> 
     
     fetchIrsDataMap(opts) --> irsServiceFetch(reply(json))
@@ -359,10 +355,7 @@ Canary Rules:
 
   4. in fetchIrsDataMap, we shall call fetchIrsDataMap
 
-{\"IRS\":{\"t1\":\"t1\", \"m2\":\"m2\", \"m3\":\"m3\", \"m4\":\"m4\", \"b1\":\"b1\", \"b2\":\"b2\", \"b3\":\"b3\" }, \"ATH\":{\"t1\":\"contentZone3\", \"m2\":\"contentZone3\", \"m3\":\"contentZone4\", \"m4\":\"contentZone5\", \"b1\":\"b1\", \"b2\":\"b2\", \"b3\":\"b3\"}, \"BTV\":{\"m2\":\"m2\", \"m3\":\"contentZone3\",  \"m4\":\"contentZone4\", \"b1\":\"contentZone5\", \"b2\":\"b2\"}}
-
-
-echo '{"reqId":"049dc482-8a6b-4baa-8f96-48541f5ecd81","pageType":"itempage","tenant":"Walmart.com","cookieInfo":{"vtc":"bnZioywaD1-DyWZ8omix88x","AID":"wmlspartner=wlpa:reflectorid=22222222227037539814:lastupd=1475191281937","CID":"","SP":"s","athrvi":"","ath":"","DL":"94086,37.368804931640625,-122.03630065917969,ip,94086,USA,CA","sps":"i$25059351;52027820;45452302;44488686;46998022;16480941;50690487;11027394;27280906;19790468;35590291;","SSOE":"","exp":"1+1473369590+XX5hE1O9-AIWoZNC5KGSSI+60+"},"dataInput":{"productId":"45452302","categoryId":""},"userClientInfo":{"deviceType":"desktop","userAgent":"","callType":"SERVER"},"zones":{"contentZone3":[{"type":"SlickCarousel"}],"contentZone4":[{"type":"SlickCarousel"}],"contentZone5":[{"type":"SlickCarousel"}]}}' | curl --header 'Host:dev.walmart.com:3000' --header WM_CONSUMER.ID:x --header WM_SVC.NAME:athena --header WM_SVC.VERSION:0.0.1 --header WM_SVC.ENV:qa --header WM_QOS.CORRELATION_ID:12345 -X POST -d @- http://athena.prod-c.walmart.com/irs-ws/2.0/p13n | tee /tmp/x
+echo '{"reqId":"1","pageType":"itempage","tenant":"Walmart.com","cookieInfo":{"vtc":"DyWZ8omix88x","SP":"s},"dataInput":{"productId":"45452302","categoryId":""}' | curl --header 'Host:dev.walmart.com:3000' --header WM_CONSUMER.ID:x --header WM_SVC.NAME:athena --header WM_SVC.VERSION:0.0.1 --header WM_SVC.ENV:qa --header WM_QOS.CORRELATION_ID:12345 -X POST -d @- http://athena.prod-c.walmart.com/irs-ws/2.0/p13n | tee /tmp/x
 
 
 # ###########################
@@ -442,24 +435,6 @@ cookieValue = URLDecoder.decode(cookie.getValue(), "UTF-8");
 
   3. ath and athrvi cookie.
     product.js: "common/athena/athrvi".createAthRVI(productData.usItemId);
-
-
-# ############
-#  MAPS and Holideal
-# ###########
-
-  4. Preso query parameters
-    a. cat_id=3944_1078524_1077944
-    b. facet:value, cat_id=0&facet=price:$50 - $100
-    c. min_price/max_price, max_price=125
-    d. _sp, shipping pass
-  missing:
-    e. featured category
-    f. best sellers in category
-    g. top brand ?
-
-  5. Questions:
-    a. how does earch/category
 
 
 ####
